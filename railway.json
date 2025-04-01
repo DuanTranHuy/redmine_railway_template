@@ -1,11 +1,37 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
-  "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
-  },
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
-  }
+  },
+  "services": [
+    {
+      "name": "redmine",
+      "image": "docker.io/bitnami/redmine:6",
+      "ports": [
+        {
+          "port": 3000,
+          "exposeAsHTTP": true
+        }
+      ],
+      "volumes": [
+        {
+          "mountPath": "/bitnami/redmine",
+          "name": "redmine-data"
+        }
+      ],
+      "envVarFiles": [".env.redmine"]
+    },
+    {
+      "name": "postgresql",
+      "image": "docker.io/bitnami/postgresql:latest",
+      "volumes": [
+        {
+          "mountPath": "/bitnami/postgresql",
+          "name": "postgresql-data"
+        }
+      ],
+      "envVarFiles": [".env.postgresql"]
+    }
+  ]
 }
